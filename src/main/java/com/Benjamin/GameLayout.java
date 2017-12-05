@@ -3,11 +3,9 @@ package com.Benjamin;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Objects;
 
 //import static com.Benjamin.cardObjectToPicture.setcardObjectToPicture;
 
@@ -40,6 +38,7 @@ public class GameLayout extends JFrame {
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
+    HashMap<JButton, Object> buttonsToCardValueHashMap = new HashMap<>();
 
     static String displayer = new String();
 
@@ -136,6 +135,7 @@ public class GameLayout extends JFrame {
         for (int i = 0; i < 13; i++) {  // This is for displaying all of the cards in your hand.
             Object card = playerHandArray.get(i);  // Getthing the players hand and putting it in a a single card object to be displayed.
             ImageIcon displayMe = new ImageIcon( cardObjectToPicture(card)); // Running it throught the cardObjectToPicture to get ImageIcon
+            buttonsToCardValueHashMap.put(cardButtonList.get(i), card);  // Adding to my Hashmap matching buttons and there cards.
 
             if (displayMe.equals(null)) { // Seeing if its empty
                  // Hoping it will show me what went wrong by letting
@@ -153,22 +153,24 @@ public class GameLayout extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                System.exit(0); // Exiting program
             }
         });
-        
+
 
         cardButton1Image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                cardButton1Image.getIcon();
-                ImageIcon YourLabel = new ImageIcon( );
-
-
-
-                cardButton1Image.setIcon(null);
-
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(0); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                   putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton1Image.setIcon(null); // To clear the button once the card is used.
             }
         });
 
@@ -176,9 +178,6 @@ public class GameLayout extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Object card =  playerHandArray.get(1);
-                ImageIcon displayMe = new ImageIcon( cardObjectToPicture(card));
-                cardButton2Image.setIcon(displayMe);
 
             }
         });

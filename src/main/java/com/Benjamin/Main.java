@@ -22,6 +22,8 @@ public class Main {
     static DealHands teamMatesHand = new DealHands();
     static DealHands opponentRight = new DealHands();
 
+    static SortCards playerHandSorted = new SortCards();
+
 
     int playerTeamScore = 0;
     int oppoentsTeamScore = 0;
@@ -34,7 +36,7 @@ public class Main {
         Collections.shuffle(checkDeck);  // This is a quick built in feature to shuffle the deck.
         //playerHand.getHand(checkDeck);
         ArrayList<String> playerHandArray =  playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
-
+        playerHandArray = playerHandSorted.getPlayersHandSorted(playerHandArray); // Summons the sort by suit for easyer card reading for the user
 
         // TODo sort the players hand for easier viewing.
         ArrayList<String> opponentLeftArray = opponentLeft.getHand(checkDeck);

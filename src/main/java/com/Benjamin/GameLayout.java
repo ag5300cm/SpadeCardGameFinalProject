@@ -43,9 +43,6 @@ public class GameLayout extends JFrame {
     static String displayer = new String();
 
 
-
-
-
     GameLayout(ArrayList playerHandArray) {
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.
@@ -69,68 +66,6 @@ public class GameLayout extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        // All the club card and their matching picture.
-        ImageIcon ClubAce = new ImageIcon("ClubAce.png"); // These might not be needed.
-        ImageIcon ClubTwo = new ImageIcon("ClubTwo.png");
-        ImageIcon ClubThree = new ImageIcon("ClubThree.png");
-        ImageIcon ClubFour = new ImageIcon("ClubFour.png");
-        ImageIcon ClubFive = new ImageIcon("ClubFive.png");
-        ImageIcon ClubSix = new ImageIcon("ClubSix.png");
-        ImageIcon ClubSeven = new ImageIcon("ClubSeven.png");
-        ImageIcon ClubEight = new ImageIcon("ClubEight.png");
-        ImageIcon ClubNine = new ImageIcon("ClubNine.png");
-        ImageIcon ClubTen = new ImageIcon("ClubTen.png");
-        ImageIcon ClubJack = new ImageIcon("ClubJack.png");
-        ImageIcon ClubQueen = new ImageIcon("ClubQueen.png");
-        ImageIcon ClubKing = new ImageIcon("ClubKing.png");
-
-        // All the Diamond card and their matching picture.
-        ImageIcon DiamondAce = new ImageIcon("DiamondAce.png");
-        ImageIcon DiamondTwo = new ImageIcon("DiamondTwo.png");
-        ImageIcon DiamondThree = new ImageIcon("DiamondThree.png");
-        ImageIcon DiamondFour = new ImageIcon("DiamondFour.png");
-        ImageIcon DiamondFive = new ImageIcon("DiamondFive.png");
-        ImageIcon DiamondSix = new ImageIcon("DiamondSix.png");
-        ImageIcon DiamondSeven = new ImageIcon("DiamondSeven.png");
-        ImageIcon DiamondEight = new ImageIcon("DiamondEight.png");
-        ImageIcon DiamondNine = new ImageIcon("DiamondNine.png");
-        ImageIcon DiamondTen = new ImageIcon("DiamondTen.png");
-        ImageIcon DiamondJack = new ImageIcon("DiamondJack.png");
-        ImageIcon DiamondQueen = new ImageIcon("DiamondQueen.png");
-        ImageIcon DiamondKing = new ImageIcon("DiamondKing.png");
-
-        // All the Heart card and their matching picture.
-        ImageIcon HeartAce = new ImageIcon("HeartAce.png");
-        ImageIcon HeartTwo = new ImageIcon("HeartTwo.png");
-        ImageIcon HeartThree = new ImageIcon("HeartThree.png");
-        ImageIcon HeartFour = new ImageIcon("HeartFour.png");
-        ImageIcon HeartFive = new ImageIcon("HeartFive.png");
-        ImageIcon HeartSix = new ImageIcon("HeartSix.png");
-        ImageIcon HeartSeven = new ImageIcon("HeartSeven.png");
-        ImageIcon HeartEight = new ImageIcon("HeartEight.png");
-        ImageIcon HeartNine = new ImageIcon("HeartNine.png");
-        ImageIcon HeartTen = new ImageIcon("HeartTen.png");
-        ImageIcon HeartJack = new ImageIcon("HeartJack.png");
-        ImageIcon HeartQueen = new ImageIcon("HeartQueen.png");
-        ImageIcon HeartKing = new ImageIcon("HeartKing.png");
-
-        // All the Spades card and their matching picture.
-        ImageIcon SpadesAce = new ImageIcon("SpadesAce.png");
-        ImageIcon SpadesTwo = new ImageIcon("SpadesTwo.png");
-        ImageIcon SpadesThree = new ImageIcon("SpadesThree.png");
-        ImageIcon SpadesFour = new ImageIcon("SpadesFour.png");
-        ImageIcon SpadesFive = new ImageIcon("SpadesFive.png");
-        ImageIcon SpadesSix = new ImageIcon("SpadesSix.png");
-        ImageIcon SpadesSeven = new ImageIcon("SpadesSeven.png");
-        ImageIcon SpadesEight = new ImageIcon("SpadesEight.png");
-        ImageIcon SpadesNine = new ImageIcon("SpadesNine.png");
-        ImageIcon SpadesTen = new ImageIcon("SpadesTen.png");
-        ImageIcon SpadesJack = new ImageIcon("SpadesJack.png");
-        ImageIcon SpadesQueen = new ImageIcon("SpadesQueen.png");
-        ImageIcon SpadesKing = new ImageIcon("SpadesKing.png");
-
-        ImageIcon JokerBig = new ImageIcon("JokerBig.PND");
-        ImageIcon JokerSmall = new ImageIcon("JokerLittle.PNG");
 
         for (int i = 0; i < 13; i++) {  // This is for displaying all of the cards in your hand.
             Object card = playerHandArray.get(i);  // Getthing the players hand and putting it in a a single card object to be displayed.
@@ -149,6 +84,10 @@ public class GameLayout extends JFrame {
             }
         }
 
+
+
+
+        // My TODO Save the program to SQL
         // Will close the program, maybe try and add a save to it???
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -178,12 +117,216 @@ public class GameLayout extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(1); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton2Image.setIcon(null); // To clear the button once the card is used.
 
             }
         });
 
+        cardButton3Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(2); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton3Image.setIcon(null); // To clear the button once the card is used.
 
+            }
+        });
+
+        cardButton4Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(3); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton4Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton5Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(4); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton5Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+        cardButton6Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(5); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton6Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton7Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(6); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton7Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton8Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(7); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton8Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton9Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(8); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton9Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton10Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(9); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton10Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton11Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(10); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton11Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton12Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(11); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton12Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
+
+        cardButton13Image.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // When clicked will throw the current card it holds forward, or the card it played
+                try {
+                    //Object card1 =  buttonsToCardValueHashMap.get(0);
+                    Object card1 = playerHandArray.get(12); // This needs to line up with the button number.
+                    ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
+                    putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+                }catch (NullPointerException nfe) {
+                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
+                }
+                cardButton13Image.setIcon(null); // To clear the button once the card is used.
+
+            }
+        });
 
 
     }

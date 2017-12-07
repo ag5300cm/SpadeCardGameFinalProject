@@ -36,6 +36,9 @@ public class GameLayout extends JFrame {
     private JLabel putAcrossOfUserCardsHere;
     private JLabel putYourThrownCard;
     private JLabel BooksPerTeam;
+    private JLabel oppoentleftTextLabel;
+    private JLabel oppoentRightTextLabel;
+    private JLabel accossOfUserTextLabel;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -114,6 +117,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -156,6 +160,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -199,6 +204,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -242,6 +248,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -285,6 +292,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -327,6 +335,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -370,6 +379,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -413,6 +423,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -456,6 +467,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -499,6 +511,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -542,6 +555,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -585,6 +599,7 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -631,6 +646,8 @@ public class GameLayout extends JFrame {
                     String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
                     ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
                     putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+//                    leftOpponentPlayed = suitValue(leftOpponentPlayed) + " of " + cardValue(leftOpponentPlayed) ;  // Was used for trouble shooting
+//                    oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
                     ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
@@ -763,7 +780,7 @@ public class GameLayout extends JFrame {
     public static String cardObjectToPicture(Object cardNumberAndSuitLetter) {
 
         String stringOfCardToWorkWith = cardNumberAndSuitLetter.toString(); // Making the input a string.
-        String suitOfCard = stringOfCardToWorkWith.substring(stringOfCardToWorkWith.length() -1); // Getting the last letter of it which will decide the suit.
+        String suitOfCard = stringOfCardToWorkWith.substring(stringOfCardToWorkWith.length() -1, stringOfCardToWorkWith.length()); // Getting the last letter of it which will decide the suit.
         String numberOrRoyalityOfCard = stringOfCardToWorkWith.substring(0,1); // Getting the first char of it which will decide the card value
 
         String suit = suitValue(suitOfCard); // sent to figure out the suit
@@ -778,22 +795,25 @@ public class GameLayout extends JFrame {
     public static String suitValue(String findSuit) {
         String suit = ""; // Emtpy variable to put it in
 
-        if (findSuit.equalsIgnoreCase("C")) { // The matching game, does the suit match which letter C, D, H, S
+        if (findSuit.equalsIgnoreCase("c")) { // The matching game, does the suit match which letter C, D, H, S
             suit = "Club"; // Redefining the variable
-        } else if (findSuit.equalsIgnoreCase("D")) {
+        } else if (findSuit.equalsIgnoreCase("d")) {
             suit = "Diamond";
-        } else if (findSuit.equalsIgnoreCase("H")) {
+        } else if (findSuit.equalsIgnoreCase("h")) {
             suit = "Heart";
-        } else if (findSuit.equalsIgnoreCase("S")) {
+        } else if (findSuit.equalsIgnoreCase("s")) {
             suit = "Spades";
-        } else {
-            suit = "e"; // for error!
         }
+
+//        else {
+//            suit = "e"; // for error!
+//        }
         return suit; // Sent that sucker back
     }
 
     // To help define the card value, why you ask i didn't do it like the suits above, because its good to try and learn things by doing them differently.
     public static String cardValue(String findValue) {
+        findValue = findValue.toUpperCase();
 
         switch (findValue) { // Testing the card to find its value
             case "A":  // Ace

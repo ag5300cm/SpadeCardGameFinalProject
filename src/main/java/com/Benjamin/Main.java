@@ -30,12 +30,12 @@ public class Main {
 
 
     public static void main(String[] args) {
-	// write your code here
+        // write your code here
 
         ArrayList<String> checkDeck = deck.getCompleteDeck(); // Getting the deck I plan to work with
         Collections.shuffle(checkDeck);  // This is a quick built in feature to shuffle the deck.
         //playerHand.getHand(checkDeck);
-        ArrayList<String> playerHandArray =  playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
+        ArrayList<String> playerHandArray = playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
         playerHandArray = playerHandSorted.getPlayersHandSorted(playerHandArray); // Summons the sort by suit for easyer card reading for the user
 
         // TODo sort the players hand for easier viewing.
@@ -46,11 +46,11 @@ public class Main {
         int PlayerTeamBooks = 0;
         int ComputerTeamBooks = 0;
 
-        GameLayout gui = new GameLayout(playerHandArray);
+        //CardPicked cardPickled = new CardPicked();
 
-
-
-
+        GameLayout gui = new GameLayout(playerHandArray, opponentLeftArray, teamMatesHandArray, checkDeck);
 
     }
+
+
 }

@@ -35,15 +35,20 @@ public class GameLayout extends JFrame {
     private JLabel putRigthOfUserCardsHere;
     private JLabel putAcrossOfUserCardsHere;
     private JLabel putYourThrownCard;
+    private JLabel BooksPerTeam;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
     HashMap<JButton, Object> buttonsToCardValueHashMap = new HashMap<>();
 
-    static String displayer = new String();
+    String displayer = new String();
+    static String cardPicked = "";
+
+    int PlayerTeamBooks = 0;
+    int ComputerTeamBooks = 0;
 
 
-    GameLayout(ArrayList playerHandArray) {
+    GameLayout(ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck) {
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.
         cardButtonList.add(cardButton5Image);  cardButtonList.add(cardButton6Image);  cardButtonList.add(cardButton7Image);  cardButtonList.add(cardButton8Image);
@@ -84,9 +89,6 @@ public class GameLayout extends JFrame {
             }
         }
 
-
-
-
         // My TODO Save the program to SQL
         // Will close the program, maybe try and add a save to it???
         exitButton.addActionListener(new ActionListener() {
@@ -104,8 +106,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(0); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -121,8 +148,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(1); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -139,8 +191,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(2); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -157,8 +234,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(3); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -175,8 +277,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(4); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -192,8 +319,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(5); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -210,8 +362,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(6); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -228,8 +405,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(7); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -246,8 +448,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(8); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -264,8 +491,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(9); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -282,8 +534,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(10); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -300,8 +577,33 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(11); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -318,8 +620,37 @@ public class GameLayout extends JFrame {
                 try {
                     //Object card1 =  buttonsToCardValueHashMap.get(0);
                     Object card1 = playerHandArray.get(12); // This needs to line up with the button number.
+                    cardPicked = card1.toString();
+
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
+
+                     //   String pickedCard = playerTurn(cardPicked, playerHandArray); // cardpicked is the button they clicked on.
+                        // Players turn
+                    String pickedCard = cardPicked;
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+
+                    String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+                    ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+                    putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+
+                    String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+                    ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+                    putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+
+                    WhoWinsRound thisRound = new WhoWinsRound();
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
+                    if (PointForBook == true) {
+                        PlayerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    } else {
+                        ComputerTeamBooks++;
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                    }
+
+
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
                 }
@@ -328,7 +659,103 @@ public class GameLayout extends JFrame {
             }
         });
 
+//        while (!gameOver(playerHandArray)) {
+//
+//            String pickedCard = playerTurn(cardPicked, playerHandArray); // cardpicked is the button they clicked on.
+//            // Players turn
+//
+//            String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+//            ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+//            putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+//
+//
+//            String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+//            ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+//            putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+//
+//            String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+//            ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+//            putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+//        }
 
+    }
+
+
+
+//    public class computerPlays(String getCardPicked)
+//
+//        String pickedCard = getCardPicked;
+//
+//
+//        String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
+//        ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
+//        putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+//
+//
+//        String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
+//        ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
+//        putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
+//
+//        String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
+//        ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
+//        putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
+//    }
+
+    public static String computerTurn(ArrayList computersHand, String pickedCard) {
+
+        try {
+            // make sure it matches the suit.
+            String suitPlayed = pickedCard.substring(pickedCard.length() - 1, pickedCard.length());  // This should let us know whatever suit it is.
+            //String suitPlayedLowerCase = (suitPlayed); // Making it lowercase for comparison purposes.
+            for (int i = 0; i < computersHand.size(); i++) {  // This searching the hand for a matching suit
+                String compareMe = computersHand.get(i).toString().toLowerCase();  //
+                if (suitPlayed.equalsIgnoreCase(compareMe.substring(compareMe.length() -1))) { // Seeing if they match suits
+                    computersHand.remove(i); // removes the card from the deck
+                    return compareMe;   // Returning the a card if suits match.
+                    // Should I change back to uppercase ???
+                }
+            }
+            String cardComputerWillPlay = computersHand.get(0).toString(); // Default if no match found.
+            computersHand.remove(0);
+            return cardComputerWillPlay;
+
+        } catch (StringIndexOutOfBoundsException siouR) {
+            System.out.println(siouR);
+        }
+
+
+        String cardComputerWillPlay = computersHand.get(0).toString(); // Default if no match found.
+        computersHand.remove(0);
+        return cardComputerWillPlay;
+
+    }
+
+    public static String playerTurn(String cardPicked, ArrayList playerHandArray) {
+
+        String cardPlayed = cardPicked; // To place the card they picked in this variable
+        boolean checkCardInHand = false;  // For  the do-while loop to
+
+        do {
+            for (int i = 0; i < playerHandArray.size(); i++) {
+                String compareMe = playerHandArray.get(i).toString();
+                if (cardPicked.equalsIgnoreCase(compareMe)) {
+                    checkCardInHand = true; // Will break the loop if it is a card they have in their hand
+                    //playerHandArray.remove(i); // Removing that card from thier hand.
+                }
+            }
+
+        } while (!checkCardInHand);
+
+        return cardPlayed;
+    }
+
+    // Took this from the go fish game because it works so well.
+    public static boolean gameOver(ArrayList playerHandArray) { // To end the game if nothing left in hand.
+        if (playerHandArray.isEmpty()) {
+            return true; // Lets the game know nothing left in the hand
+        } else {
+            return false; // If you still have cards left will return false to keep playing.
+        }
     }
 
 

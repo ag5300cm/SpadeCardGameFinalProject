@@ -3,6 +3,10 @@ package com.Benjamin;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -45,9 +49,9 @@ public class GameLayout extends JFrame {
     HashMap<JButton, Object> buttonsToCardValueHashMap = new HashMap<>();
 
     String displayer = new String();
-    static String cardPicked = "";
+    static String cardPicked = ""; // To be filled in by whatever card you picked.
 
-    int PlayerTeamBooks = 0;
+    int PlayerTeamBooks = 0; // Keeping track for each book collected for the team
     int ComputerTeamBooks = 0;
 
 
@@ -97,11 +101,51 @@ public class GameLayout extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Connection connection = null;
+                try {
+                    connection = ConnectionConfiguration.getConnection();
+                    Statement statement = connection.createStatement();
+                    if (connection != null) {
+                        String LastSave_ = "LastSave_";  //
+                        String playerHand2 = ArrayListToString.ArrayListToString(playerHandArray);  // transforing each players hand into a String to go into the database table
+                        String opponentLeft2 = ArrayListToString.ArrayListToString(opponentLeftArray);
+                        String TeammateAccoss2 = ArrayListToString.ArrayListToString(teamMatesHandArray);
+                        String opponentRight2 = ArrayListToString.ArrayListToString(checkDeck);
+                        int BooksUser2 = PlayerTeamBooks; // Adding the current amount of books each team has.
+                        int BooksOpponent2 = ComputerTeamBooks;
+
+//spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
+//      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
+                        // my TODO to add  the total score for games of more the one round.
+                        // Creating the SQL statement which will be used to add your data to the table .
+                        String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
+                                " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
+                        PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
+                        psInsert.setString(1, "LastSave"); // Matching up data for the nine ? spots (no zero)
+                        psInsert.setString(2, playerHand2);
+                        psInsert.setString(3, opponentLeft2);
+                        psInsert.setString(4, TeammateAccoss2);
+                        psInsert.setString(5, opponentRight2);
+                        psInsert.setInt(6, BooksUser2);
+                        psInsert.setInt(7, BooksOpponent2);
+                        psInsert.executeUpdate(); // update and adding it to the statement
+                        statement.executeUpdate(addSaveDataSQL);  // update the table.
+                    }
+
+                    statement.close(); // closing SQL stuff and helpers
+                    connection.close();
+                } catch (SQLException sqlE) {
+                    System.out.println("Did not save " + sqlE); // This seem to pop up even if it does save?
+                    //JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not save, \n Sorry. ");
+                }
+
+
+
                 System.exit(0); // Exiting program
             }
         });
 
-
+        // my TODO I know these buttons should have more methods they call on instead of the whole program with in them.
         cardButton1Image.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,10 +157,10 @@ public class GameLayout extends JFrame {
                     ImageIcon displayMe1 = new ImageIcon(cardObjectToPicture(card1)); // Getting the Image form the card data
                     putYourThrownCard.setIcon(displayMe1); // Displaying the card in the label.
 
-                    String pickedCard = cardPicked;
-                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
-                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
-                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
+                    String pickedCard = cardPicked;  // This takes the card picked and allows the computer to run their turn
+                    String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard); // The computer figures out what to play with the computer turn program
+                    ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed)); // Finding the image Icon for what the computer wants to play.
+                    putLeftOfUserCardsHere.setIcon(displayLeftOppoent); // Displaying it.
                     //oppoentleftTextLabel.setText(leftOpponentPlayed);
 
                     String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
@@ -127,13 +171,13 @@ public class GameLayout extends JFrame {
                     ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
                     putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
 
-                    WhoWinsRound thisRound = new WhoWinsRound();
-                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed);
-                    if (PointForBook == true) {
+                    WhoWinsRound thisRound = new WhoWinsRound();  // Creates something to run WhoWinsRound
+                    boolean PointForBook = thisRound.getPlayerTeamWinners(pickedCard, teamMatePlayed, leftOpponentPlayed, rightOpponentPlayed); // Compares everyones cards they played.
+                    if (PointForBook == true) { // Adding the points for human and teammate.
                         PlayerTeamBooks++;
-                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
+                        BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  ); // Displays books for each team after this round.
                     } else {
-                        ComputerTeamBooks++;
+                        ComputerTeamBooks++; // Adding porints for computer opponent.
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
 
@@ -718,7 +762,7 @@ public class GameLayout extends JFrame {
 //        putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
 //    }
 
-    public static String computerTurn(ArrayList computersHand, String pickedCard) {
+    public static String computerTurn(ArrayList computersHand, String pickedCard) { // Looking at computers hand and comparing it to card picked so it matches suit.
 
         try {
             // make sure it matches the suit.

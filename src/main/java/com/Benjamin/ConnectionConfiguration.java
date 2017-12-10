@@ -15,7 +15,8 @@ public class ConnectionConfiguration {  // public class for  data conn
         try {
             Class.forName("com.mysql.jdbc.Driver"); // finding the driver
             // connected to the spades database. with user and password already set.
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spades", "user", "kittens");
+            //                                                                               \/ \/\/\/\/  Added ?useSSL=true to get rid of connectivitiy errors, could also be true?
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spades?useSSL=false", "user", "kittens");
 
         } catch (Exception e) {  // In case of connection problems
             e.printStackTrace();

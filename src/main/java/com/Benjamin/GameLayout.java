@@ -37,13 +37,15 @@ public class GameLayout extends JFrame {
     private JLabel putAcrossOfUserCardsHere;
     private JLabel putYourThrownCard;
     private JLabel BooksPerTeam;
-    private JLabel oppoentleftTextLabel;
+    private JLabel oppoentleftTextLabel; //
     private JLabel oppoentRightTextLabel;
     private JLabel accossOfUserTextLabel;
     private JButton loadButton;
-    private JLabel testingLabel;
+    private JLabel testingLabel;  // I use these when need for testing and trouble-shooting.
     private JLabel testingLabel2;
     private JLabel testingLabel3;
+    private JButton saveButton;
+    private JButton loadLastSaveButton;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -127,17 +129,120 @@ public class GameLayout extends JFrame {
 //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
 //      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
                     }
-
                     statement.close(); // closing SQL stuff and helpers
                     connection.close();
                 } catch (SQLException sqlE) {
                     System.out.println("Did not save " + sqlE); // This seem to pop up even if it does save?
                     //JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not save, \n Sorry. ");
                 }
-
-
-
                 System.exit(0); // Exiting program
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Connection connection = null;
+                try {
+                    connection = ConnectionConfiguration.getConnection();
+                    Statement statement = connection.createStatement();
+                    String saveName = JOptionPane.showInputDialog("Save game as: " );  // Pops-up and input statement for the user to save the game with name of choice.
+                    if (connection != null) {
+                        String playerHand2 = ArrayListToString.ArrayListToString(playerHandArray);  // transforing each players hand into a String to go into the database table
+                        String opponentLeft2 = ArrayListToString.ArrayListToString(opponentLeftArray);
+                        String TeammateAccoss2 = ArrayListToString.ArrayListToString(teamMatesHandArray);
+                        String opponentRight2 = ArrayListToString.ArrayListToString(checkDeck);
+                        int BooksUser2 = PlayerTeamBooks; // Adding the current amount of books each team has.
+                        int BooksOpponent2 = ComputerTeamBooks;
+                        // above this the data that will go into MySQL
+
+                        //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
+//      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
+                        String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
+                                " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
+                        // my TODO to add  the total score for games of more the one round.
+                        // Creating the SQL statement which will be used to add your data to the table .
+                        PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
+                        psInsert.setString(1, saveName); // Matching up data for the nine ? spots (no zero)
+                        psInsert.setString(2, playerHand2);
+                        psInsert.setString(3, opponentLeft2);
+                        psInsert.setString(4, TeammateAccoss2);
+                        psInsert.setString(5, opponentRight2);
+                        psInsert.setInt(6, BooksUser2);
+                        psInsert.setInt(7, BooksOpponent2);
+                        psInsert.executeUpdate(); // update and adding it to the statement
+                        statement.executeUpdate(addSaveDataSQL);  // update the table.
+//spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
+//      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
+                    }
+                    statement.close(); // closing SQL stuff and helpers
+                    connection.close();
+                } catch (SQLException sqlE) {
+                    System.out.println("Did not save " + sqlE); // This seem to pop up even if it does save?
+                    //JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not save, \n Sorry. ");
+                }
+            }
+        });
+
+        loadLastSaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Connection connection = null;
+                try {
+                    // tranformed a good amount of this code from https://github.com/minneapolis-edu/DogSQL/blob/master/src/main/java/com/company/DogDB.java
+                    connection = ConnectionConfiguration.getConnection(); // getting connection
+                    PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
+                    findLastSave.setString(1, "LastSave");
+                    ResultSet resultSet = findLastSave.executeQuery();
+
+
+                    //Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
+                    //String LastSave = "LastSave";
+
+                    //String fetchAllDataSQL = "SELECT playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent FROM spades WHERE NAME LIKE 'LastSave' ";  // Getting the saved data.
+                    //String fetchAllDataSQL = "SELECT * FROM spades WHERE NAME='LastSave' ";
+                    //String fetchAllDataSQL = "SELECT * FROM spades";
+                    //ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
+                    //testingLabel.setText(resultSet.toString());
+
+                    // TODO GET THIS WORKING!!!!!!!!!!!!!!!!!!!!
+                    while (resultSet.next()) {
+
+                            String name = resultSet.getString("LastSave");
+                            String pHand = resultSet.getString("PlayerHand"); // Getting saved arraylist of the players hand.
+                            playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
+                            playerHandArray.addAll(ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
+                            showCards(playerHandArray); // Showing your saved data's hand
+
+                            String oLHand = resultSet.getString("OpponentLeft"); // Getting other computer player cards in a simple string
+                            opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
+                            opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
+
+                            String tMAHand = resultSet.getString("TeammateAccoss");
+                            teamMatesHandArray.clear();
+                            teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
+
+                            String oRHand = resultSet.getString("OpponentRight");
+                            checkDeck.clear();
+                            checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
+
+                            int booksUserInt = resultSet.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
+                            PlayerTeamBooks = booksUserInt; // Putting it as current books.
+                            int booksOpponentInt = resultSet.getInt("BooksOpponent");
+                            ComputerTeamBooks = booksOpponentInt;
+                            //TODO add score
+
+                    }
+
+
+                    resultSet.close(); // Closing time. Time for you to go out go out into the world.
+                    //PreparedStatement.CLOSE_ALL_RESULTS; // Closing time. Turn the lights up over every boy and every girl.
+                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
+                    // Closing time. You don't have to go home but you can't stay here.
+                } catch (SQLException sqlE) {
+                    System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
+                    JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
+                }
             }
         });
 

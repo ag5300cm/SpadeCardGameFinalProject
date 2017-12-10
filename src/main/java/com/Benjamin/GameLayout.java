@@ -3,10 +3,7 @@ package com.Benjamin;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -43,6 +40,10 @@ public class GameLayout extends JFrame {
     private JLabel oppoentleftTextLabel;
     private JLabel oppoentRightTextLabel;
     private JLabel accossOfUserTextLabel;
+    private JButton loadButton;
+    private JLabel testingLabel;
+    private JLabel testingLabel2;
+    private JLabel testingLabel3;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -79,22 +80,7 @@ public class GameLayout extends JFrame {
         setVisible(true);
 
 
-        for (int i = 0; i < 13; i++) {  // This is for displaying all of the cards in your hand.
-            Object card = playerHandArray.get(i);  // Getthing the players hand and putting it in a a single card object to be displayed.
-            ImageIcon displayMe = new ImageIcon( cardObjectToPicture(card)); // Running it throught the cardObjectToPicture to get ImageIcon
-            buttonsToCardValueHashMap.put(cardButtonList.get(i), card);  // Adding to my Hashmap matching buttons and there cards.
-
-            if (displayMe.equals(null)) { // Seeing if its empty
-                 // Hoping it will show me what went wrong by letting
-                cardButtonList.get(i).setText(null);
-                cardButtonList.get(i).setIcon(null);
-            } else if (displayMe.toString().length() < 4) { // Will display what card it should be with a number and suit, one char each mostlikely.
-                String showWhatwentWrong = card.toString(); // Making it a string for display
-                cardButtonList.get(i).setText(showWhatwentWrong); // Displaying text
-            } else { // Yeah it works
-                cardButtonList.get(i).setIcon(displayMe); // Displaying picture for each card.
-            }
-        }
+        showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
 
         // My TODO Save the program to SQL
         // Will close the program, maybe try and add a save to it???
@@ -105,31 +91,41 @@ public class GameLayout extends JFrame {
                 try {
                     connection = ConnectionConfiguration.getConnection();
                     Statement statement = connection.createStatement();
+                    String LastSave_ = "LastSave";
                     if (connection != null) {
-                        String LastSave_ = "LastSave_";  //
                         String playerHand2 = ArrayListToString.ArrayListToString(playerHandArray);  // transforing each players hand into a String to go into the database table
                         String opponentLeft2 = ArrayListToString.ArrayListToString(opponentLeftArray);
                         String TeammateAccoss2 = ArrayListToString.ArrayListToString(teamMatesHandArray);
                         String opponentRight2 = ArrayListToString.ArrayListToString(checkDeck);
                         int BooksUser2 = PlayerTeamBooks; // Adding the current amount of books each team has.
                         int BooksOpponent2 = ComputerTeamBooks;
+                        // above this the data that will go into MySQL
 
+                        try { // The purpose of this is to delete your 'LastSave' for the new one.
+                            String  deleteSaveDataSQL = "DELETE FROM spades WHERE NAME = 'LastSave' ";  // MySQL syntax for delete previous one.
+                            statement.executeUpdate(deleteSaveDataSQL); // Making it happen
+                        } catch (SQLException sqlE) { // Default action if nothing there so things don't crash.
+                            System.out.println("There was no 'LastSave' to delete" + sqlE + "\n but there is now.");
+                        }
+
+ //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
+//      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
+                        String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
+                                    " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
+                        // my TODO to add  the total score for games of more the one round.
+                            // Creating the SQL statement which will be used to add your data to the table .
+                            PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
+                            psInsert.setString(1, "LastSave"); // Matching up data for the nine ? spots (no zero)
+                            psInsert.setString(2, playerHand2);
+                            psInsert.setString(3, opponentLeft2);
+                            psInsert.setString(4, TeammateAccoss2);
+                            psInsert.setString(5, opponentRight2);
+                            psInsert.setInt(6, BooksUser2);
+                            psInsert.setInt(7, BooksOpponent2);
+                            psInsert.executeUpdate(); // update and adding it to the statement
+                            statement.executeUpdate(addSaveDataSQL);  // update the table.
 //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
 //      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
-                        // my TODO to add  the total score for games of more the one round.
-                        // Creating the SQL statement which will be used to add your data to the table .
-                        String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
-                                " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
-                        PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
-                        psInsert.setString(1, "LastSave"); // Matching up data for the nine ? spots (no zero)
-                        psInsert.setString(2, playerHand2);
-                        psInsert.setString(3, opponentLeft2);
-                        psInsert.setString(4, TeammateAccoss2);
-                        psInsert.setString(5, opponentRight2);
-                        psInsert.setInt(6, BooksUser2);
-                        psInsert.setInt(7, BooksOpponent2);
-                        psInsert.executeUpdate(); // update and adding it to the statement
-                        statement.executeUpdate(addSaveDataSQL);  // update the table.
                     }
 
                     statement.close(); // closing SQL stuff and helpers
@@ -142,6 +138,60 @@ public class GameLayout extends JFrame {
 
 
                 System.exit(0); // Exiting program
+            }
+        });
+
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Connection connection = null;
+                try {
+                    // tranformed a good amount of this code from https://github.com/minneapolis-edu/DogSQL/blob/master/src/main/java/com/company/DogDB.java
+                    connection = ConnectionConfiguration.getConnection(); // getting connection
+                    Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
+
+                    // my TODO to change '*" to "LastSave" or whatever
+                    String fetchAllDataSQL = "SELECT * FROM spades";  // Getting the saved data.
+                    ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
+                    //testingLabel.setText(resultSet.toString());
+
+//playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+                    while (resultSet.next()) {
+                        String name = resultSet.getString("Name");
+                        String pHand = resultSet.getString("PlayerHand"); // Getting saved arraylist of the players hand.
+                        playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
+                        playerHandArray.addAll( ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
+                        showCards(playerHandArray); // Showing your saved data's hand
+
+                        String oLHand = resultSet.getString("OpponentLeft"); // Getting other computer player cards in a simple string
+                        opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
+                        opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
+
+                        String tMAHand = resultSet.getString("TeammateAccoss");
+                        teamMatesHandArray.clear();
+                        teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
+
+                        String oRHand = resultSet.getString("OpponentRight");
+                        checkDeck.clear();
+                        checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
+
+                        int booksUserInt = resultSet.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
+                        PlayerTeamBooks = booksUserInt; // Putting it as current books.
+                        int booksOpponentInt = resultSet.getInt("BooksOpponent");
+                        ComputerTeamBooks = booksOpponentInt;
+                        //TODO add score
+
+
+                    }
+
+                    resultSet.close(); // Closing time. Time for you to go out go out into the world.
+                    statement.close(); // Closing time. Turn the lights up over every boy and every girl.
+                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
+                    // Closing time. You don't have to go home but you can't stay here.
+                } catch (SQLException sqlE) {
+                    System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
+                    JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
+                }
             }
         });
 
@@ -720,47 +770,7 @@ public class GameLayout extends JFrame {
             }
         });
 
-//        while (!gameOver(playerHandArray)) {
-//
-//            String pickedCard = playerTurn(cardPicked, playerHandArray); // cardpicked is the button they clicked on.
-//            // Players turn
-//
-//            String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
-//            ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
-//            putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
-//
-//
-//            String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
-//            ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
-//            putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
-//
-//            String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
-//            ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
-//            putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
-//        }
-
     }
-
-
-
-//    public class computerPlays(String getCardPicked)
-//
-//        String pickedCard = getCardPicked;
-//
-//
-//        String leftOpponentPlayed = computerTurn(opponentLeftArray, pickedCard);
-//        ImageIcon displayLeftOppoent = new ImageIcon(cardObjectToPicture(leftOpponentPlayed));
-//        putLeftOfUserCardsHere.setIcon(displayLeftOppoent);
-//
-//
-//        String teamMatePlayed = computerTurn(teamMatesHandArray, pickedCard);
-//        ImageIcon displayTeamMateCard = new ImageIcon(cardObjectToPicture(teamMatePlayed));
-//        putAcrossOfUserCardsHere.setIcon(displayTeamMateCard);
-//
-//        String rightOpponentPlayed = computerTurn(checkDeck, pickedCard);
-//        ImageIcon displayRigthOppoent = new ImageIcon(cardObjectToPicture(rightOpponentPlayed));
-//        putRigthOfUserCardsHere.setIcon(displayRigthOppoent);
-//    }
 
     public static String computerTurn(ArrayList computersHand, String pickedCard) { // Looking at computers hand and comparing it to card picked so it matches suit.
 
@@ -817,6 +827,28 @@ public class GameLayout extends JFrame {
         } else {
             return false; // If you still have cards left will return false to keep playing.
         }
+    }
+
+
+    void showCards(ArrayList playerHandArraylist) {
+
+        for (int i = 0; i < 13; i++) {  // This is for displaying all of the cards in your hand.
+            Object card = playerHandArraylist.get(i);  // Getthing the players hand and putting it in a a single card object to be displayed.
+            ImageIcon displayMe = new ImageIcon( cardObjectToPicture(card)); // Running it throught the cardObjectToPicture to get ImageIcon
+            buttonsToCardValueHashMap.put(cardButtonList.get(i), card);  // Adding to my Hashmap matching buttons and there cards.
+
+            if (displayMe.equals(null)) { // Seeing if its empty
+                // Hoping it will show me what went wrong by letting
+                cardButtonList.get(i).setText(null);
+                cardButtonList.get(i).setIcon(null);
+            } else if (displayMe.toString().length() < 4) { // Will display what card it should be with a number and suit, one char each mostlikely.
+                String showWhatwentWrong = card.toString(); // Making it a string for display
+                cardButtonList.get(i).setText(showWhatwentWrong); // Displaying text
+            } else { // Yeah it works
+                cardButtonList.get(i).setIcon(displayMe); // Displaying picture for each card.
+            }
+        }
+
     }
 
 

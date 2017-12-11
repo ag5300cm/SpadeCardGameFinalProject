@@ -41,7 +41,7 @@ public class Main {
         ArrayList<String> playerHandArray = playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
         playerHandArray = playerHandSorted.getPlayersHandSorted(playerHandArray); // Summons the sort by suit for easyer card reading for the user
 
-        // TODo sort the players hand  by numbers for easier viewing.
+        // TODo sort the players hand for easier viewing.
         ArrayList<String> opponentLeftArray = opponentLeft.getHand(checkDeck);
         ArrayList<String> teamMatesHandArray = teamMatesHand.getHand(checkDeck);
         //ArrayList<String> opponentRightArray = opponentRight.getHand(checkDeck);  // Not sure this is needed because I can use the last 13 cards in the deck for the last person
@@ -62,7 +62,7 @@ public class Main {
 
                     // Making the table to store game data.  It shoudl have a name all four player hands, the currrent books and  score.
                     String createTableSpadesSaved = "CREATE TABLE IF NOT EXISTS spades (Name varchar(12), PlayerHand varchar(49), OpponentLeft varchar(49), TeammateAccoss varchar(49), OpponentRight varchar(49), BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
-                    statement.executeUpdate(createTableSpadesSaved); // Updating it so the table will come into existance.
+                    statement.executeUpdate(createTableSpadesSaved); // Updating it so the table is made if one does not exist.
 
                 } catch (SQLException sqlExcept) {
                     // Seems table already exists, If this exception thrown

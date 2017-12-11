@@ -18,7 +18,7 @@ public class Load extends JFrame { // Much of this was learned from and used fro
     ArrayList<String> nameForLoad = ArrayListOfSaveNames.getNamesFromSaved();
 
 
-    public Load(final GameLayout parentComponent) {
+    public Load(final GameLayout parentComponent, ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck ) {
         parentComponent.setEnabled(false);
         setContentPane(loadFormPanel);
         pack();
@@ -39,15 +39,11 @@ public class Load extends JFrame { // Much of this was learned from and used fro
 
         LoadList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        addListeners();
 
         getRootPane().setDefaultButton(loadButton);
 
-    }
 
-    private void addListeners() {
-
-        loadButton.addActionListener(new ActionListener() {
+      loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -56,6 +52,8 @@ public class Load extends JFrame { // Much of this was learned from and used fro
                     String nameLoadMePlease = listModel.get(selectedIndex);
                     //  send data back to sql
                     ArrayListOfSaveNames.setNameLoadMePleaseFromLoadScreen(nameLoadMePlease);
+                    parentComponent.setEnabled(true);
+                    parentComponent.recieveLoadReqest(playerHandArray, opponentLeftArray, teamMatesHandArray, checkDeck   );
                     setVisible(false);
                     Load.this.dispose();
                 } else {
@@ -81,13 +79,16 @@ public class Load extends JFrame { // Much of this was learned from and used fro
             }
         });
 
+        //TODO crash/freeze here after action?
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // System.exit(0);  // Nope closes everything down
                 //Load.this.EXIT_ON_CLOSE;
+                parentComponent.setEnabled(true);
                 setVisible(false);
                 Load.this.dispose();
+                //return GameLayout;
             }
         });
     }

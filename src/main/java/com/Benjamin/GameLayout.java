@@ -147,6 +147,10 @@ public class GameLayout extends JFrame {
                     connection = ConnectionConfiguration.getConnection();
                     Statement statement = connection.createStatement();
                     String saveName = JOptionPane.showInputDialog("Save game as: " );  // Pops-up and input statement for the user to save the game with name of choice.
+                    while (saveName.length() > 12 ) { // Data validation for name saving
+                        saveName = JOptionPane.showInputDialog("Must be less then 12 characters. \n Save game as: " );
+                    }
+
                     if (connection != null) {
                         String playerHand2 = ArrayListToString.ArrayListToString(playerHandArray);  // transforing each players hand into a String to go into the database table
                         String opponentLeft2 = ArrayListToString.ArrayListToString(opponentLeftArray);
@@ -248,66 +252,25 @@ public class GameLayout extends JFrame {
                     Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
                     String fetchAllDataSQL = "SELECT * FROM spades";  // Getting the saved data.
                     ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
-                    ArrayList<String> namesList = new ArrayList();
-                    while (resultSet.next()) {
-                        String loadNames = resultSet.getString("Name");
-                        namesList.add(loadNames);
+                    ArrayList<String> namesList = new ArrayList(); // This arraylist is to be filled up with all the options that you saved from the previous game
+                    while (resultSet.next()) { // ResultSet being active
+                        String loadNames = resultSet.getString("Name"); // Get the name of a save
+                        namesList.add(loadNames); // Adding the name of save to my arraylist to be shown in hte load screen
                     }
-                    ArrayListOfSaveNames.setNamesFromSaved(namesList);
-                    statement.close();
+                    ArrayListOfSaveNames.setNamesFromSaved(namesList); // Setting it in a method for easier transforing
+                    statement.close(); // CLosing connection.
                     connection.close();
-                    Load getRequestedLoad = new Load(GameLayout.this);
+                    Load getRequestedLoad = new Load(GameLayout.this, playerHandArray, opponentLeftArray, teamMatesHandArray, checkDeck );
                     // Above data is for going to the separate load screen
 
-
-                    // Below data is for loading the selected pick.
-//                    String pickedLoadedName = ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen();
-//                    connection = ConnectionConfiguration.getConnection(); // getting connection
-//                    PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
-//                    findLastSave.setString(1, pickedLoadedName);
-//                    ResultSet resultSetLoad = findLastSave.executeQuery();
-//                    //testingLabel.setText(resultSet.toString());
-//
-////playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
-//                    while (resultSetLoad.next()) {
-//                        String name = resultSetLoad.getString("Name");
-//                        String pHand = resultSetLoad.getString("PlayerHand"); // Getting saved arraylist of the players hand.
-//                        playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
-//                        playerHandArray.addAll( ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
-//                        showCards(playerHandArray); // Showing your saved data's hand
-//
-//                        String oLHand = resultSetLoad.getString("OpponentLeft"); // Getting other computer player cards in a simple string
-//                        opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
-//                        opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
-//
-//                        String tMAHand = resultSetLoad.getString("TeammateAccoss");
-//                        teamMatesHandArray.clear();
-//                        teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
-//
-//                        String oRHand = resultSetLoad.getString("OpponentRight");
-//                        checkDeck.clear();
-//                        checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
-//
-//                        int booksUserInt = resultSetLoad.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
-//                        PlayerTeamBooks = booksUserInt; // Putting it as current books.
-//                        int booksOpponentInt = resultSetLoad.getInt("BooksOpponent");
-//                        ComputerTeamBooks = booksOpponentInt;
-//                        //TODO add score
-//
-//
-//                    }
-//
-//                    resultSetLoad.close(); // Closing time. Time for you to go out go out into the world.
-//                    //PreparedStatement.CLOSE_CURRENT_RESULT; // Closing time. Turn the lights up over every boy and every girl.
-//                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
-//                    // Closing time. You don't have to go home but you can't stay here.
                 } catch (SQLException sqlE) {
                     System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
                     JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
                 }
             }
         });
-        if (!ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen().isEmpty()) {
+        // this checks if you need to load something other it will skip right by it.
+        if (ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen().length() > 0) {
             recieveLoadReqest(playerHandArray,opponentLeftArray, teamMatesHandArray, checkDeck);
         }
 
@@ -1040,14 +1003,16 @@ public class GameLayout extends JFrame {
         }
     }
 
+    // Below is a method that should load the selected save from the "Load" GUI list.
     public void recieveLoadReqest( ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck ) {
+        Connection connection = null; // How we gonna' start everything. Having a continuous connection eats up resources.
 
         try {
-        String pickedLoadedName = ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen();
-        Connection connection = ConnectionConfiguration.getConnection(); // getting connection
-        PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
-        findLastSave.setString(1, pickedLoadedName);
-        ResultSet resultSetLoad = findLastSave.executeQuery();
+        String pickedLoadedName = ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen(); // This gets the name from ArrayListOfSaveNames that should have been saved from the load screen
+        connection = ConnectionConfiguration.getConnection(); // getting connection
+        PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");  // The SQL string that will hopefully get the selected name and all data with it.
+        findLastSave.setString(1, pickedLoadedName); // Telling it what name to get.
+        ResultSet resultSetLoad = findLastSave.executeQuery(); // running the Query on the database.
         //testingLabel.setText(resultSet.toString());
 
 //playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck

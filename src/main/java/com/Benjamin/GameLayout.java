@@ -85,7 +85,7 @@ public class GameLayout extends JFrame {
         showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
 
         // My TODO Save the program to SQL
-        // Will close the program, maybe try and add a save to it???
+        // Will close the program, and add a save to it
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,61 +188,53 @@ public class GameLayout extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Connection connection = null;
-                try {
-                    // tranformed a good amount of this code from https://github.com/minneapolis-edu/DogSQL/blob/master/src/main/java/com/company/DogDB.java
-                    connection = ConnectionConfiguration.getConnection(); // getting connection
-                    PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
-                    findLastSave.setString(1, "LastSave");
-                    ResultSet resultSet = findLastSave.executeQuery();
+                        try {
+                            // tranformed a good amount of this code from https://github.com/minneapolis-edu/DogSQL/blob/master/src/main/java/com/company/DogDB.java
+                            connection = ConnectionConfiguration.getConnection(); // getting connection
+                            Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
 
+                            // my TODO to change '*" to "LastSave" or whatever
+                            // By selecting all it just seems to load the last one, which would be whatever was saved last.
+                            String fetchAllDataSQL = "SELECT * FROM spades";  // Getting the saved data.
+                            ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
+                            //testingLabel.setText(resultSet.toString());
 
-                    //Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
-                    //String LastSave = "LastSave";
+//playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+                            while (resultSet.next()) {
+                                String name = resultSet.getString("Name");
+                                String pHand = resultSet.getString("PlayerHand"); // Getting saved arraylist of the players hand.
+                                playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
+                                playerHandArray.addAll( ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
+                                showCards(playerHandArray); // Showing your saved data's hand
 
-                    //String fetchAllDataSQL = "SELECT playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent FROM spades WHERE NAME LIKE 'LastSave' ";  // Getting the saved data.
-                    //String fetchAllDataSQL = "SELECT * FROM spades WHERE NAME='LastSave' ";
-                    //String fetchAllDataSQL = "SELECT * FROM spades";
-                    //ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
-                    //testingLabel.setText(resultSet.toString());
+                                String oLHand = resultSet.getString("OpponentLeft"); // Getting other computer player cards in a simple string
+                                opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
+                                opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
 
-                    // TODO GET THIS WORKING!!!!!!!!!!!!!!!!!!!!
-                    while (resultSet.next()) {
+                                String tMAHand = resultSet.getString("TeammateAccoss");
+                                teamMatesHandArray.clear();
+                                teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
 
-                            String name = resultSet.getString("LastSave");
-                            String pHand = resultSet.getString("PlayerHand"); // Getting saved arraylist of the players hand.
-                            playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
-                            playerHandArray.addAll(ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
-                            showCards(playerHandArray); // Showing your saved data's hand
+                                String oRHand = resultSet.getString("OpponentRight");
+                                checkDeck.clear();
+                                checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
 
-                            String oLHand = resultSet.getString("OpponentLeft"); // Getting other computer player cards in a simple string
-                            opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
-                            opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
+                                int booksUserInt = resultSet.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
+                                PlayerTeamBooks = booksUserInt; // Putting it as current books.
+                                int booksOpponentInt = resultSet.getInt("BooksOpponent");
+                                ComputerTeamBooks = booksOpponentInt;
+                                //TODO add score
 
-                            String tMAHand = resultSet.getString("TeammateAccoss");
-                            teamMatesHandArray.clear();
-                            teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
+                            }
 
-                            String oRHand = resultSet.getString("OpponentRight");
-                            checkDeck.clear();
-                            checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
-
-                            int booksUserInt = resultSet.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
-                            PlayerTeamBooks = booksUserInt; // Putting it as current books.
-                            int booksOpponentInt = resultSet.getInt("BooksOpponent");
-                            ComputerTeamBooks = booksOpponentInt;
-                            //TODO add score
-
-                    }
-
-
-                    resultSet.close(); // Closing time. Time for you to go out go out into the world.
-                    //PreparedStatement.CLOSE_ALL_RESULTS; // Closing time. Turn the lights up over every boy and every girl.
-                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
-                    // Closing time. You don't have to go home but you can't stay here.
-                } catch (SQLException sqlE) {
-                    System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
-                    JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
-                }
+                            resultSet.close(); // Closing time. Time for you to go out go out into the world.
+                            statement.close(); // Closing time. Turn the lights up over every boy and every girl.
+                            connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
+                            // Closing time. You don't have to go home but you can't stay here.
+                        } catch (SQLException sqlE) {
+                            System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
+                            JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
+                        }
             }
         });
 
@@ -254,51 +246,70 @@ public class GameLayout extends JFrame {
                     // tranformed a good amount of this code from https://github.com/minneapolis-edu/DogSQL/blob/master/src/main/java/com/company/DogDB.java
                     connection = ConnectionConfiguration.getConnection(); // getting connection
                     Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
-
-                    // my TODO to change '*" to "LastSave" or whatever
                     String fetchAllDataSQL = "SELECT * FROM spades";  // Getting the saved data.
                     ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
-                    //testingLabel.setText(resultSet.toString());
-
-//playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+                    ArrayList<String> namesList = new ArrayList();
                     while (resultSet.next()) {
-                        String name = resultSet.getString("Name");
-                        String pHand = resultSet.getString("PlayerHand"); // Getting saved arraylist of the players hand.
-                        playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
-                        playerHandArray.addAll( ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
-                        showCards(playerHandArray); // Showing your saved data's hand
-
-                        String oLHand = resultSet.getString("OpponentLeft"); // Getting other computer player cards in a simple string
-                        opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
-                        opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
-
-                        String tMAHand = resultSet.getString("TeammateAccoss");
-                        teamMatesHandArray.clear();
-                        teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
-
-                        String oRHand = resultSet.getString("OpponentRight");
-                        checkDeck.clear();
-                        checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
-
-                        int booksUserInt = resultSet.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
-                        PlayerTeamBooks = booksUserInt; // Putting it as current books.
-                        int booksOpponentInt = resultSet.getInt("BooksOpponent");
-                        ComputerTeamBooks = booksOpponentInt;
-                        //TODO add score
-
-
+                        String loadNames = resultSet.getString("Name");
+                        namesList.add(loadNames);
                     }
+                    ArrayListOfSaveNames.setNamesFromSaved(namesList);
+                    statement.close();
+                    connection.close();
+                    Load getRequestedLoad = new Load(GameLayout.this);
+                    // Above data is for going to the separate load screen
 
-                    resultSet.close(); // Closing time. Time for you to go out go out into the world.
-                    statement.close(); // Closing time. Turn the lights up over every boy and every girl.
-                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
-                    // Closing time. You don't have to go home but you can't stay here.
+
+                    // Below data is for loading the selected pick.
+//                    String pickedLoadedName = ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen();
+//                    connection = ConnectionConfiguration.getConnection(); // getting connection
+//                    PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
+//                    findLastSave.setString(1, pickedLoadedName);
+//                    ResultSet resultSetLoad = findLastSave.executeQuery();
+//                    //testingLabel.setText(resultSet.toString());
+//
+////playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+//                    while (resultSetLoad.next()) {
+//                        String name = resultSetLoad.getString("Name");
+//                        String pHand = resultSetLoad.getString("PlayerHand"); // Getting saved arraylist of the players hand.
+//                        playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
+//                        playerHandArray.addAll( ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
+//                        showCards(playerHandArray); // Showing your saved data's hand
+//
+//                        String oLHand = resultSetLoad.getString("OpponentLeft"); // Getting other computer player cards in a simple string
+//                        opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
+//                        opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
+//
+//                        String tMAHand = resultSetLoad.getString("TeammateAccoss");
+//                        teamMatesHandArray.clear();
+//                        teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
+//
+//                        String oRHand = resultSetLoad.getString("OpponentRight");
+//                        checkDeck.clear();
+//                        checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
+//
+//                        int booksUserInt = resultSetLoad.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
+//                        PlayerTeamBooks = booksUserInt; // Putting it as current books.
+//                        int booksOpponentInt = resultSetLoad.getInt("BooksOpponent");
+//                        ComputerTeamBooks = booksOpponentInt;
+//                        //TODO add score
+//
+//
+//                    }
+//
+//                    resultSetLoad.close(); // Closing time. Time for you to go out go out into the world.
+//                    //PreparedStatement.CLOSE_CURRENT_RESULT; // Closing time. Turn the lights up over every boy and every girl.
+//                    connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
+//                    // Closing time. You don't have to go home but you can't stay here.
                 } catch (SQLException sqlE) {
                     System.out.println("Did not load " + sqlE); // This seem to pop up even if it does save?
                     JOptionPane.showMessageDialog(GameLayout.this, "Error! \n Did not load, \n Sorry. ");
                 }
             }
         });
+        if (!ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen().isEmpty()) {
+            recieveLoadReqest(playerHandArray,opponentLeftArray, teamMatesHandArray, checkDeck);
+        }
 
         // my TODO I know these buttons should have more methods they call on instead of the whole program with in them.
         cardButton1Image.addActionListener(new ActionListener() {
@@ -1029,6 +1040,53 @@ public class GameLayout extends JFrame {
         }
     }
 
+    public void recieveLoadReqest( ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck ) {
+
+        try {
+        String pickedLoadedName = ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen();
+        Connection connection = ConnectionConfiguration.getConnection(); // getting connection
+        PreparedStatement findLastSave = connection.prepareStatement("SELECT  * FROM  spades WHERE Name = (?)");
+        findLastSave.setString(1, pickedLoadedName);
+        ResultSet resultSetLoad = findLastSave.executeQuery();
+        //testingLabel.setText(resultSet.toString());
+
+//playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+        while (resultSetLoad.next()) {
+            //String name = resultSetLoad.getString("Name");
+            String pHand = resultSetLoad.getString("PlayerHand"); // Getting saved arraylist of the players hand.
+            playerHandArray.clear(); // clearing current arraylist to make room for the saved one.
+            playerHandArray.addAll(ArrayListToString.StringToArraylist(pHand)); // Adding all the saved cards to the arraylist for functionality.
+            showCards(playerHandArray); // Showing your saved data's hand
+
+            String oLHand = resultSetLoad.getString("OpponentLeft"); // Getting other computer player cards in a simple string
+            opponentLeftArray.clear(); // Clearing the current list of cards in the arraylist
+            opponentLeftArray.addAll(ArrayListToString.StringToArraylist(oLHand)); // Making the String into an arraylist of cards for the computer from saved data
+
+            String tMAHand = resultSetLoad.getString("TeammateAccoss");
+            teamMatesHandArray.clear();
+            teamMatesHandArray.addAll(ArrayListToString.StringToArraylist(tMAHand));
+
+            String oRHand = resultSetLoad.getString("OpponentRight");
+            checkDeck.clear();
+            checkDeck.addAll(ArrayListToString.StringToArraylist(oRHand));
+
+            int booksUserInt = resultSetLoad.getInt("BooksUser"); // Getting how many books each team has from saved MySQL data
+            PlayerTeamBooks = booksUserInt; // Putting it as current books.
+            int booksOpponentInt = resultSetLoad.getInt("BooksOpponent");
+            ComputerTeamBooks = booksOpponentInt;
+            //TODO add score
+            }
+            resultSetLoad.close(); // Closing time. Time for you to go out go out into the world.
+            //PreparedStatement.CLOSE_CURRENT_RESULT; // Closing time. Turn the lights up over every boy and every girl.
+            connection.close();; // Closing time. One last call for alcohol so finish your whiskey or beer.
+            // Closing time. You don't have to go home but you can't stay here.
+
+        } catch (SQLException SQLE) {
+            System.out.println("Loading data error" + SQLE);
+
+          }
+
+    }
 
 
 }

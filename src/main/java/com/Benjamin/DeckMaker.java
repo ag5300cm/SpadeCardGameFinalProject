@@ -19,6 +19,7 @@ class DeckMaker {
     }
 
     void setCompleteDeck() {
+        boolean jokersAdd = ArrayListOfSaveNames.getJokersInPlay();  // finds out if the user wants to play with jokers.
         // Below is both card numbers or ace or royality and card type
         String[] cardValues = new String[] { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" }; // All the different types of cards but jokers.
         String[] cardTypes = new  String[] {"C", "D", "H", "S" } ;  // Club, Diamonds, Hearts ands spades for each suit
@@ -27,6 +28,20 @@ class DeckMaker {
             String cardT = cardTypes[i]; // Identifing the card type to
             for (int j = 0; j < cardValues.length; j++) {
                 completeDeck.add(cardValues[j] + cardT);
+            }
+        }
+
+        if (jokersAdd == true) { // If they want to play with joker will remove two cards and add two jokers.
+            for (int i = 0; i < 52; i++) { // Will search the whole deck for two cards to be removed.
+                if (completeDeck.get(i).equalsIgnoreCase("2H") ) { // looking for the two of hearts
+                    completeDeck.remove(i); // gets rid of the two of hearts
+                    completeDeck.add(i, "LS");  // adds the little joker
+                }
+                if (completeDeck.get(i).equalsIgnoreCase("2D") ) { // looking for two of diamonds
+                    completeDeck.remove(i); // tossing out two of diamonds
+                    completeDeck.add(i, "BS"); // Adding  big joker.
+                }
+
             }
         }
     }

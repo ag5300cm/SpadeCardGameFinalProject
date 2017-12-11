@@ -7,6 +7,8 @@ public class ArrayListOfSaveNames { // This is a method to keep an arraylist and
     private static ArrayList<String> namesFromSaved = new ArrayList();
     private static String nameLoadMePleaseFromLoadScreen = new String();
 
+    private static Boolean jokersInPlay = false ;
+
     public static ArrayList<String> getNamesFromSaved() {
         return namesFromSaved;
     }
@@ -21,6 +23,14 @@ public class ArrayListOfSaveNames { // This is a method to keep an arraylist and
 
     public static void setNameLoadMePleaseFromLoadScreen(String nameFromLoad) {
         nameLoadMePleaseFromLoadScreen = nameFromLoad;
+    }
+
+    public static boolean getJokersInPlay() {
+        return jokersInPlay;
+    }
+
+    public static void setJokersInPlay(boolean jokersChecked) {
+        jokersInPlay = jokersChecked;
     }
 
 }

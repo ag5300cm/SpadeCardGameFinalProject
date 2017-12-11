@@ -18,32 +18,30 @@ public class Load extends JFrame { // Much of this was learned from and used fro
     private JButton deleteButton;
     private JButton cancelButton;
 
-    DefaultListModel<String> listModel; //
+    DefaultListModel<String> listModel; // the model need for showing the data in the list
 
     ArrayList<String> nameForLoad = ArrayListOfSaveNames.getNamesFromSaved();
 
 
     public Load(final GameLayout parentComponent, ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck ) {
+        this.setLocationRelativeTo(null); // Using this to centerizer the window when it comes up.
         parentComponent.setEnabled(false);
         setContentPane(loadFormPanel);
         pack();
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        listModel = new DefaultListModel<String>();
+        listModel = new DefaultListModel<String>(); // the model need for showing the data in the list, second half of it.
 
-        //nameForLoad.addAll(findLoadNameData(ArrayList names));
-
-        for (int i = 0; i < nameForLoad.size(); i++) {
+        for (int i = 0; i < nameForLoad.size(); i++) { // Adding all SQL names of previous saves to the list to go onto display
             listModel.addElement(nameForLoad.get(i));
         }
 
-        LoadList.setModel(listModel);
+        LoadList.setModel(listModel); // Telling the the list to use this model as it data source.
 
-        LoadList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        LoadList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only one thing selected at a time by user. Should help prevent user error.
 
-
-        getRootPane().setDefaultButton(loadButton);
+        getRootPane().setDefaultButton(loadButton); // The button will click if user presses enter key
 
  // If a person picks a game they want to load then
       loadButton.addActionListener(new ActionListener() {

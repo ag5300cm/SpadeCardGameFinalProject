@@ -84,7 +84,6 @@ public class GameLayout extends JFrame {
 
         showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
 
-        // My TODO Save the program to SQL
         // Will close the program, and add a save to it
         exitButton.addActionListener(new ActionListener() {
             @Override
@@ -197,7 +196,7 @@ public class GameLayout extends JFrame {
                             connection = ConnectionConfiguration.getConnection(); // getting connection
                             Statement statement = connection.createStatement(); // using prepared statements for easier work with MySQL syntax
 
-                            // my TODO to change '*" to "LastSave" or whatever
+
                             // By selecting all it just seems to load the last one, which would be whatever was saved last.
                             String fetchAllDataSQL = "SELECT * FROM spades";  // Getting the saved data.
                             ResultSet resultSet = statement.executeQuery(fetchAllDataSQL); // puting it in a resultSet
@@ -273,6 +272,14 @@ public class GameLayout extends JFrame {
         if (ArrayListOfSaveNames.getNameLoadMePleaseFromLoadScreen().length() > 0) {
             recieveLoadReqest(playerHandArray,opponentLeftArray, teamMatesHandArray, checkDeck);
         }
+
+        optionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Options pickSelectedOptions = new Options(GameLayout.this);
+            }
+        });
 
         // my TODO I know these buttons should have more methods they call on instead of the whole program with in them.
         cardButton1Image.addActionListener(new ActionListener() {
@@ -957,9 +964,8 @@ public class GameLayout extends JFrame {
         } else if (findSuit.equalsIgnoreCase("h")) {
             suit = "Heart";
         } else if (findSuit.equalsIgnoreCase("s")) {
-            suit = "Spades";
+            suit = "Spades"; // All jokers will be known as spades
         }
-
 //        else {
 //            suit = "e"; // for error!
 //        }
@@ -997,6 +1003,10 @@ public class GameLayout extends JFrame {
                 return "Queen";
             case "K": // King
                 return "King"; // Most points you can get for card value
+            case "L": // Little Joker
+                return "Little";
+            case "B": // Big joker
+                return "Big";
             default:
                 return findValue; // if does not match will return this so hopefull I can find the error.
 

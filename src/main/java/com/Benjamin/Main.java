@@ -27,6 +27,8 @@ public class Main {
 
     static SortCards playerHandSorted = new SortCards();
 
+    //static boolean jokersInPlay = false;
+
 
     int playerTeamScore = 0;
     int oppoentsTeamScore = 0;

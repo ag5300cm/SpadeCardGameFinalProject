@@ -90,6 +90,10 @@ public class WhoWinsRound {
                 return 12 ;
             case "K": // King
                 return 13; // Most points you can get for card value
+            case "L": // Little Joker
+                return 17;
+            case "B": // Big joker
+                return 19;
             default:
                 return 0;
         }

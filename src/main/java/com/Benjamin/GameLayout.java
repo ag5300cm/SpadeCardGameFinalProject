@@ -49,6 +49,7 @@ public class GameLayout extends JFrame {
     private JButton loadLastSaveButton;
     private JButton instructionsButton;
     private JButton newGameButton;
+    private JLabel BooksPerTeamGuesses;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -60,9 +61,11 @@ public class GameLayout extends JFrame {
     int PlayerTeamBooks = 0; // Keeping track for each book collected for the team
     int ComputerTeamBooks = 0;
 
+    int playerTeamScore = 0;
+    int oppoentsTeamScore = 0;
 
 
-//ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+    //ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
     GameLayout() {
 
         DeckMaker deck = new DeckMaker(); // Makes a new shuffeled deck for the game round.
@@ -73,6 +76,8 @@ public class GameLayout extends JFrame {
         DealHands teamMatesHand = new DealHands();
         DealHands opponentRight = new DealHands(); // this ones is actually 'chechdeck' or the last 13 cards in the deck
         SortCards playerHandSorted = new SortCards();
+
+
 
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.
@@ -102,12 +107,30 @@ public class GameLayout extends JFrame {
         ArrayList<String> playerHandArray2 = playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
         final ArrayList playerHandArray = playerHandSorted.getPlayersHandSorted(playerHandArray2); // Summons the sort by suit for easyer card reading for the user
 
-        // TODo sort the players hand by numbers for easier viewing.
+        // TODo sort the players hand also by numbers for easier viewing.
         ArrayList<String> opponentLeftArray = opponentLeft.getHand(checkDeck);
         ArrayList<String> teamMatesHandArray = teamMatesHand.getHand(checkDeck);
         //ArrayList<String> opponentRightArray = opponentRight.getHand(checkDeck);  // Not sure this is needed because I can use the last 13 cards in the deck for the last person
 
+        int leftOpponentBookGuess = getBooks.getBooksGuessOfCanWin(opponentLeftArray); // Getting opponents estimates of how many cards they can get.
+        int RightOpponentBookGuess = getBooks.getBooksGuessOfCanWin(checkDeck);
+        int totalOpponenetBookGuess = leftOpponentBookGuess + RightOpponentBookGuess;  // Adding the two opponents together
+        int yourTeamateBookGuess = getBooks.getBooksGuessOfCanWin(teamMatesHandArray); // Your teammates guess on how many they can get.
+
         showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
+
+        int intUserGuess = -1; // Starts at negative one for do-while loop usages, it will activate the code below to get users guess.
+        do {
+            // String statement of users guess
+            String stringUserGuess = JOptionPane.showInputDialog("Your Opponents say " + totalOpponenetBookGuess + "\n" +
+                    " Your teammate believes they can get " + yourTeamateBookGuess + "\n" +
+                    " You can get?"  );
+
+            intUserGuess = Integer.parseInt( stringUserGuess); // Tranforming string guess of user to int.
+        } while (intUserGuess == -1); // Keep doing tell its a possitive int.
+        int teamTotalBookGuess = yourTeamateBookGuess + intUserGuess; // You and your teammates total guess.
+        BooksPerTeamGuesses.setText("Your Goal: \n " + teamTotalBookGuess + "\n \n Oppoents Goal: \n" + totalOpponenetBookGuess ); // Let user know of book goal.
+
 
         instructionsButton.addActionListener(new ActionListener() {
             @Override
@@ -177,8 +200,7 @@ public class GameLayout extends JFrame {
                             psInsert.setInt(7, BooksOpponent2);
                             psInsert.executeUpdate(); // update and adding it to the statement
                             statement.executeUpdate(addSaveDataSQL);  // update the table.
-//spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
-//      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
+
                     }
                     statement.close(); // closing SQL stuff and helpers
                     connection.close();
@@ -986,6 +1008,8 @@ public class GameLayout extends JFrame {
                 cardButtonList.get(i).setIcon(displayMe); // Displaying picture for each card.
             }
         }
+
+
 
     }
 

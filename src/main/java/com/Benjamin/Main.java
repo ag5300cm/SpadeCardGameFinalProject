@@ -18,8 +18,8 @@ import java.util.Collections;
 public class Main {
 
 
-    int playerTeamScore = 0;
-    int oppoentsTeamScore = 0;
+    static int playerTeamScore = 0;
+    static int oppoentsTeamScore = 0;
 
 
     public static void main(String[] args) {
@@ -51,6 +51,20 @@ public class Main {
         } catch (Exception e) { // I case something goes wrong don't want the program to crash
             e.printStackTrace();
         }
+
+//        int biggerNumberForWin = 0;
+//        do {
+//
+//            GameLayout gui = new GameLayout();
+//
+//
+//            if (playerTeamScore > oppoentsTeamScore  ) {
+//                biggerNumberForWin = playerTeamScore;
+//            } else {
+//                biggerNumberForWin = oppoentsTeamScore;
+//            }
+//
+//        } while (biggerNumberForWin  < 500); // 500 is the averages score in spadse.
 
         GameLayout gui = new GameLayout();
 

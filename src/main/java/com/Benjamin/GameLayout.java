@@ -38,7 +38,7 @@ public class GameLayout extends JFrame {
     private JLabel putAcrossOfUserCardsHere;
     private JLabel putYourThrownCard;
     private JLabel BooksPerTeam ;
-    private JLabel oppoentleftTextLabel; //
+    private JLabel oppoentleftTextLabel; //  use these when need for testing and trouble-shooting.
     private JLabel oppoentRightTextLabel;
     private JLabel accossOfUserTextLabel;
     private JButton loadButton;
@@ -61,12 +61,9 @@ public class GameLayout extends JFrame {
     int PlayerTeamBooks = 0; // Keeping track for each book collected for the team
     int ComputerTeamBooks = 0;
 
-    int playerTeamScore = 0;
-    int oppoentsTeamScore = 0;
-
-
-    //ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+        //ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
     GameLayout() {
+
 
         DeckMaker deck = new DeckMaker(); // Makes a new shuffeled deck for the game round.
 
@@ -76,8 +73,6 @@ public class GameLayout extends JFrame {
         DealHands teamMatesHand = new DealHands();
         DealHands opponentRight = new DealHands(); // this ones is actually 'chechdeck' or the last 13 cards in the deck
         SortCards playerHandSorted = new SortCards();
-
-
 
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.

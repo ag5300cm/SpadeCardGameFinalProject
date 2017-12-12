@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -36,7 +37,7 @@ public class GameLayout extends JFrame {
     private JLabel putRigthOfUserCardsHere;
     private JLabel putAcrossOfUserCardsHere;
     private JLabel putYourThrownCard;
-    private JLabel BooksPerTeam;
+    private JLabel BooksPerTeam ;
     private JLabel oppoentleftTextLabel; //
     private JLabel oppoentRightTextLabel;
     private JLabel accossOfUserTextLabel;
@@ -46,6 +47,8 @@ public class GameLayout extends JFrame {
     private JLabel testingLabel3;
     private JButton saveButton;
     private JButton loadLastSaveButton;
+    private JButton instructionsButton;
+    private JButton newGameButton;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -58,7 +61,19 @@ public class GameLayout extends JFrame {
     int ComputerTeamBooks = 0;
 
 
-    GameLayout(ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck) {
+
+//ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
+    GameLayout() {
+
+        DeckMaker deck = new DeckMaker(); // Makes a new shuffeled deck for the game round.
+
+        // my TODO this spot might need to be changed to do more then one round.
+        DealHands playerHand = new DealHands(); // Arraylist objects for each players hands
+        DealHands opponentLeft = new DealHands();
+        DealHands teamMatesHand = new DealHands();
+        DealHands opponentRight = new DealHands(); // this ones is actually 'chechdeck' or the last 13 cards in the deck
+        SortCards playerHandSorted = new SortCards();
+
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.
         cardButtonList.add(cardButton5Image);  cardButtonList.add(cardButton6Image);  cardButtonList.add(cardButton7Image);  cardButtonList.add(cardButton8Image);
@@ -81,8 +96,45 @@ public class GameLayout extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
+        ArrayList<String> checkDeck = deck.getCompleteDeck(); // Getting the deck I plan to work with
+        Collections.shuffle(checkDeck);  // This is a quick built in feature to shuffle the deck.
+        //playerHand.getHand(checkDeck);
+        ArrayList<String> playerHandArray2 = playerHand.getHand(checkDeck); // Each player getting a random hand. With the last 13 cards in the deck for the last opponent
+        final ArrayList playerHandArray = playerHandSorted.getPlayersHandSorted(playerHandArray2); // Summons the sort by suit for easyer card reading for the user
+
+        // TODo sort the players hand by numbers for easier viewing.
+        ArrayList<String> opponentLeftArray = opponentLeft.getHand(checkDeck);
+        ArrayList<String> teamMatesHandArray = teamMatesHand.getHand(checkDeck);
+        //ArrayList<String> opponentRightArray = opponentRight.getHand(checkDeck);  // Not sure this is needed because I can use the last 13 cards in the deck for the last person
 
         showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
+
+        instructionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // The ImageIcon is show so you don't have to see a big red x symbol.
+                ImageIcon jokerWithInstruct = new ImageIcon("SpadesLittle.PNG");
+                JOptionPane.showMessageDialog(null, "In spades the you work with your partner accross the table \n" +
+                        " to try and take the most books.    ", "Instructions", JOptionPane.OK_OPTION, jokerWithInstruct);
+
+            }
+        });
+
+        // Will start a new game incase you don't like the one you are currently in.
+        newGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int selected = JOptionPane.showConfirmDialog(null, "This will delete current game. \n Continue anyways?",
+                        "New Game", JOptionPane.YES_NO_OPTION );
+
+                if (selected == JOptionPane.YES_OPTION) { // WIll show a comfiem option dialog button to make sure user does not want to delete current game
+                    GameLayout gui = new GameLayout(); // Restarting the GUI GameLayout, which will restart a new game
+                }
+
+            }
+        });
 
         // Will close the program, and add a save to it
         exitButton.addActionListener(new ActionListener() {

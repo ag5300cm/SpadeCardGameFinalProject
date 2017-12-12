@@ -29,8 +29,8 @@ public class Options extends JFrame {
                 } else {
                     ArrayListOfSaveNames.setJokersInPlay(false);
                 }
-
-                // TODO find a way to start a new game.
+                // a way to start a new game.
+                GameLayout gui = new GameLayout();
 
                 parentComponent.setEnabled(true); // ReEnables the parent component.
                 setVisible(false); // Makes the load screen vanish

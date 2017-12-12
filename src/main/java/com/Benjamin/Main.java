@@ -17,18 +17,12 @@ import java.util.Collections;
 
 public class Main {
 
-
-    static int playerTeamScore = 0;
+    static int playerTeamScore = 0; // To be used for total score evently.
     static int oppoentsTeamScore = 0;
 
 
     public static void main(String[] args) {
         // write your code here
-
-        int PlayerTeamBooks = 0;
-        int ComputerTeamBooks = 0;
-
-        //CardPicked cardPickled = new CardPicked();
 
         // Below for database connection and making a table if one does not exist.
         Connection connection = null;  //
@@ -52,6 +46,15 @@ public class Main {
             e.printStackTrace();
         }
 
+
+        GameLayout gui = new GameLayout(); // starts up game right here
+
+    }
+}
+
+
+
+
 //        int biggerNumberForWin = 0;
 //        do {
 //
@@ -66,9 +69,3 @@ public class Main {
 //
 //        } while (biggerNumberForWin  < 500); // 500 is the averages score in spadse.
 
-        GameLayout gui = new GameLayout();
-
-    }
-
-
-}

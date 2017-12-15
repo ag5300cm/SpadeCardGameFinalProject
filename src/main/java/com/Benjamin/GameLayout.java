@@ -50,6 +50,7 @@ public class GameLayout extends JFrame {
     private JButton instructionsButton;
     private JButton newGameButton;
     private JLabel BooksPerTeamGuesses;
+    private JLabel ScoreLabel;
 
     LinkedList<JButton> cardButtonList = new LinkedList<>(); // Making a list of buttons.
 
@@ -58,8 +59,13 @@ public class GameLayout extends JFrame {
     String displayer = new String();
     static String cardPicked = ""; // To be filled in by whatever card you picked.
 
+    int PlayerTeamBooksGuess = 0;
+    int ComputerTeamBooksGuess = 0;
+
     int PlayerTeamBooks = 0; // Keeping track for each book collected for the team
     int ComputerTeamBooks = 0;
+
+    int howManyCardsHaveBeenPlayed = 0; // To keep track of when your hand is empty, so it know when to start a new one.
 
         //ArrayList playerHandArray, ArrayList opponentLeftArray, ArrayList teamMatesHandArray, ArrayList checkDeck
     GameLayout() {
@@ -73,6 +79,7 @@ public class GameLayout extends JFrame {
         DealHands teamMatesHand = new DealHands();
         DealHands opponentRight = new DealHands(); // this ones is actually 'chechdeck' or the last 13 cards in the deck
         SortCards playerHandSorted = new SortCards();
+        // I use checkDeck for the opponentRight's hand, its just the 13 leftover cards in the deck.
 
 
         cardButtonList.add(cardButton1Image);  cardButtonList.add(cardButton2Image);  cardButtonList.add(cardButton3Image);  cardButtonList.add(cardButton4Image); // Adding buttons to the list.
@@ -110,6 +117,7 @@ public class GameLayout extends JFrame {
         int leftOpponentBookGuess = getBooks.getBooksGuessOfCanWin(opponentLeftArray); // Getting opponents estimates of how many cards they can get.
         int RightOpponentBookGuess = getBooks.getBooksGuessOfCanWin(checkDeck);
         int totalOpponenetBookGuess = leftOpponentBookGuess + RightOpponentBookGuess;  // Adding the two opponents together
+        ComputerTeamBooksGuess = totalOpponenetBookGuess;
         int yourTeamateBookGuess = getBooks.getBooksGuessOfCanWin(teamMatesHandArray); // Your teammates guess on how many they can get.
 
         showCards((playerHandArray)); // This takes the arraylist of card for the player and displays them on the buttons.
@@ -123,8 +131,12 @@ public class GameLayout extends JFrame {
 
             intUserGuess = Integer.parseInt( stringUserGuess); // Tranforming string guess of user to int.
         } while (intUserGuess == -1); // Keep doing tell its a possitive int.
-        int teamTotalBookGuess = yourTeamateBookGuess + intUserGuess; // You and your teammates total guess.
-        BooksPerTeamGuesses.setText("Your Goal: \n " + teamTotalBookGuess + "\n \n Oppoents Goal: \n" + totalOpponenetBookGuess ); // Let user know of book goal.
+        int teamTotalBookGuess = 0;
+        teamTotalBookGuess += yourTeamateBookGuess + intUserGuess; // You and your teammates total guess.
+        PlayerTeamBooksGuess = teamTotalBookGuess;
+        BooksPerTeamGuesses.setText("Your Goal: \n " + teamTotalBookGuess + "\n \n Oppoents Goal: \n" + totalOpponenetBookGuess ); // Let user know of book goal.-
+        // This is for displaying the current score of the game.
+        ScoreLabel.setText("Your Team Score is: " + ArrayListOfSaveNames.getPlayerTeamScoreTo500() + " \n Opponents Score is: " + ArrayListOfSaveNames.getComputerTeamScoreTo500()); // This shows the current score level
 
 
         instructionsButton.addActionListener(new ActionListener() {
@@ -148,8 +160,16 @@ public class GameLayout extends JFrame {
                         "New Game", JOptionPane.YES_NO_OPTION );
 
                 if (selected == JOptionPane.YES_OPTION) { // WIll show a comfiem option dialog button to make sure user does not want to delete current game
+                    PlayerTeamBooks = 0; ComputerTeamBooks = 0; // Resettting the scores of everything to zero
+                    PlayerTeamBooksGuess = 0; ComputerTeamBooksGuess = 0;
+                    ArrayListOfSaveNames.setPlayerTeamScoreTo500(0); //
+                    ArrayListOfSaveNames.setComputerTeamScoreTo500(0);
+
+
                     GameLayout gui = new GameLayout(); // Restarting the GUI GameLayout, which will restart a new game
                 }
+
+
 
             }
         });
@@ -215,8 +235,12 @@ public class GameLayout extends JFrame {
                     connection = ConnectionConfiguration.getConnection();
                     Statement statement = connection.createStatement();
                     String saveName = JOptionPane.showInputDialog("Save game as: " );  // Pops-up and input statement for the user to save the game with name of choice.
-                    while (saveName.length() > 12 ) { // Data validation for name saving
-                        saveName = JOptionPane.showInputDialog("Must be less then 12 characters. \n Save game as: " );
+                    try {
+                        while (saveName.length() > 12) { // Data validation for name saving
+                            saveName = JOptionPane.showInputDialog("Must be less then 12 characters. \n Save game as: ");
+                        }
+                    } catch (NullPointerException npE) {
+                        System.out.println("Problem with length of name for saving" + npE);
                     }
 
                     if (connection != null) {
@@ -385,6 +409,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++; // Adding porints for computer opponent.
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                    putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -428,6 +454,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -472,6 +500,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -516,6 +546,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -560,6 +592,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -603,6 +637,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -647,6 +683,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -691,6 +729,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -735,6 +775,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -779,6 +821,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -823,6 +867,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -867,6 +913,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
+                    howManyCardsHaveBeenPlayed += 1;
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -915,7 +963,8 @@ public class GameLayout extends JFrame {
                         ComputerTeamBooks++;
                         BooksPerTeam.setText("Your Team: \n " + PlayerTeamBooks +"\n \n Oppoents Team: \n" + ComputerTeamBooks  );
                     }
-
+                    howManyCardsHaveBeenPlayed += 1; // Maybe do 13 booleans with a method to know when it is used up.
+                    newRoundForGame(howManyCardsHaveBeenPlayed);
 
                 }catch (NullPointerException nfe) {
                     putYourThrownCard.setText(null); // Set text to null of nothing happens.
@@ -1131,6 +1180,33 @@ public class GameLayout extends JFrame {
             System.out.println("Loading data error" + SQLE);
 
           }
+
+    }
+
+    public void newRoundForGame(int howManyCardsHaveBeenPlayed) { // This method is ment to see if all 13 cards have been played and you need to run the next round.
+
+        // my TODO
+
+        int playerPoints = 0; // Basic integer I plan on using for math and sending data
+        int computerPoints = 0;
+
+        if (howManyCardsHaveBeenPlayed == 13) {
+            if (PlayerTeamBooks >= PlayerTeamBooksGuess) { // Figuring out if you took more or equal books that you guessed.
+                playerPoints  += (PlayerTeamBooksGuess * 10) + (PlayerTeamBooks-PlayerTeamBooksGuess); // Will add to your score by 10 points for each correct guess and one point for each extra book
+                ArrayListOfSaveNames.setPlayerTeamScoreTo500(playerPoints); // Adding to a separate number to make sure does not get deleted per round.
+            }
+
+            if (ComputerTeamBooks >= ComputerTeamBooksGuess) {
+                computerPoints += (ComputerTeamBooksGuess * 10) + (ComputerTeamBooks -  ComputerTeamBooksGuess);
+                ArrayListOfSaveNames.setComputerTeamScoreTo500(computerPoints);
+            }
+            //ScoreLabel.setText("Your Team Score is: " + PlayerTeamScoreTo500 + " \n Opponents Score is: " + ComputerTeamScoreTo500);
+            howManyCardsHaveBeenPlayed = 0;
+            PlayerTeamBooksGuess = 0; ComputerTeamBooksGuess = 0;  // Resetting the book guesses to get ready for next round.
+
+
+            GameLayout gui = new GameLayout(); // restarts GameLayout to deal a new hand.
+        }
 
     }
 

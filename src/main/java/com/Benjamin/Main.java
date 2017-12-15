@@ -17,10 +17,6 @@ import java.util.Collections;
 
 public class Main {
 
-    static int playerTeamScore = 0; // To be used for total score evently.
-    static int oppoentsTeamScore = 0;
-
-
     public static void main(String[] args) {
         // write your code here
 
@@ -38,7 +34,10 @@ public class Main {
                     statement.executeUpdate(createTableSpadesSaved); // Updating it so the table is made if one does not exist.
 
                 } catch (SQLException sqlExcept) {
+                    //Statement statement = connection.createStatement(); // Connection statement for easier to work with connecting
                     // Seems table already exists, If this exception thrown
+                    //String useTableSpadesSaved = "USE spades";
+                    //statement.executeUpdate(useTableSpadesSaved);
                 }
                 connection.close();  // closing the connection
             }

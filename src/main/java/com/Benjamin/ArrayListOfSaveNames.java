@@ -9,6 +9,9 @@ public class ArrayListOfSaveNames { // This is a method to keep an arraylist and
 
     private static Boolean jokersInPlay = false ;
 
+    private static int PlayerTeamScoreTo500 = 0;
+    private static int ComputerTeamScoreTo500 = 0;
+
     public static ArrayList<String> getNamesFromSaved() {
         return namesFromSaved;
     }
@@ -32,5 +35,22 @@ public class ArrayListOfSaveNames { // This is a method to keep an arraylist and
     public static void setJokersInPlay(boolean jokersChecked) {
         jokersInPlay = jokersChecked;
     }
+
+    public static int getPlayerTeamScoreTo500() {
+        return PlayerTeamScoreTo500;
+    }
+
+    public static void setPlayerTeamScoreTo500(int addToPlayerTeamScore) {
+        PlayerTeamScoreTo500 = PlayerTeamScoreTo500 + addToPlayerTeamScore;
+    }
+
+    public static int getComputerTeamScoreTo500() {
+        return ComputerTeamScoreTo500;
+    }
+
+    public static void setComputerTeamScoreTo500(int addToComputerTeamScore) {
+        ComputerTeamScoreTo500 = ComputerTeamScoreTo500 + addToComputerTeamScore;
+    }
+
 
 }

@@ -145,8 +145,12 @@ public class GameLayout extends JFrame {
 
                 // The ImageIcon is show so you don't have to see a big red x symbol.
                 ImageIcon jokerWithInstruct = new ImageIcon("SpadesLittle.PNG");
-                JOptionPane.showMessageDialog(null, "In spades the you work with your partner accross the table \n" +
-                        " to try and take the most books.    ", "Instructions", JOptionPane.OK_OPTION, jokerWithInstruct);
+                JOptionPane.showMessageDialog(null,
+                        "In spades the you work with your partner across the table \n" +
+                                " to try and take the most books. You guess at how many books \n" +
+                                " you can take that round. For each book you correctly take \n " +
+                                " you recieve ten points. Between the two team its first to \n " +
+                                " 500 points. ", "Instructions", JOptionPane.OK_OPTION, jokerWithInstruct);
 
             }
         });
@@ -1216,8 +1220,18 @@ public class GameLayout extends JFrame {
             howManyCardsHaveBeenPlayed = 0;
             PlayerTeamBooksGuess = 0; ComputerTeamBooksGuess = 0;  // Resetting the book guesses to get ready for next round.
 
+            if (ArrayListOfSaveNames.getPlayerTeamScoreTo500() > 500) { //  Checks to see if you won thte game.
+                ImageIcon jokerWithInstruct = new ImageIcon("SpadesLittle.PNG");
+                JOptionPane.showMessageDialog(null, "CONGRATS \n" +
+                        " and VICTORY!    ", "YOU WIN!", JOptionPane.OK_OPTION, jokerWithInstruct);
+            } else if (ArrayListOfSaveNames.getComputerTeamScoreTo500() > 500 ) {
+                ImageIcon jokerWithInstruct = new ImageIcon("SpadesLittle.PNG");
+                JOptionPane.showMessageDialog(null, "Was a tough \n" +
+                        " game.    ", "You lose, sorry. ", JOptionPane.OK_OPTION, jokerWithInstruct);
+            } else {
+                GameLayout gui = new GameLayout(); // restarts GameLayout to deal a new hand.
+            }
 
-            GameLayout gui = new GameLayout(); // restarts GameLayout to deal a new hand.
         }
 
     }

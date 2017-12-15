@@ -38,7 +38,7 @@ public class SortCards {
             }
         }
 
-        //sortByValue(heartSort, 1, 15);
+        //heartSort = sortByValue(heartSort);
         playersHandSorted.addAll(heartSort);  // simple option or other below.
 //        for (String str : heartSort) {
 //            playersHandSorted.add(str);
@@ -69,17 +69,33 @@ public class SortCards {
 //        }
     }
 
-//    void sortByValue(ArrayList<String> cardSuitArrayLIst, int from, int to) {
+//    ArrayList sortByValue(ArrayList<String> cardSuitArrayLIst) {
 //
-//        if (from != to) {
-//            if (from > to) {
-//                sortByValue(cardSuitArrayLIst, from -1, to);
-//            } else {
-//                sortByValue(cardSuitArrayLIst, from+1, to);
-//            }
-//            Collections.swap(cardSuitArrayLIst, from, to);
+//        if (cardSuitArrayLIst.size() < 2) { // If nothing there will return it quicker.
+//            return cardSuitArrayLIst;
 //        }
 //
+//        ArrayList<String> sortMeArraylist = new ArrayList<>();
+//        sortMeArraylist.addAll(cardSuitArrayLIst);
+//        System.out.println(cardSuitArrayLIst);
+//
+//        for (int i = 0; i < cardSuitArrayLIst.size(); i++) {
+//            int sortMeI = getNumberValue(cardSuitArrayLIst.get(i));
+//            String moveMeI = cardSuitArrayLIst.get(i);
+//
+//             for (int j = 0; j < (cardSuitArrayLIst.size()); j++) {
+//                int sortMeJ =  getNumberValue(cardSuitArrayLIst.get(j));
+//                String moveMeJ = cardSuitArrayLIst.get(j);
+//                if (sortMeI > sortMeJ) {
+//                    sortMeArraylist.set(i, moveMeJ);
+//                    sortMeArraylist.set(j, moveMeI);
+//                    System.out.println(sortMeArraylist);
+//                }
+//
+//            }
+//        }
+//
+//        return cardSuitArrayLIst;
 //    }
 
 //    ArrayList sortByValue(ArrayList cardSuitArrayLIst) {

@@ -15,6 +15,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// TODO darn missing save data of the guess of how many books each team can get.
+
 public class Main {
 
     public static void main(String[] args) {

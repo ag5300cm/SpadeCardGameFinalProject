@@ -202,8 +202,7 @@ public class GameLayout extends JFrame {
  //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
 //      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
                         String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
-                                    " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
-                        // my TODO to add  the total score for games of more the one round.
+                                    " VALUES (?, ? , ? , ? , ? , ?, ?, ?, ? )";
                             // Creating the SQL statement which will be used to add your data to the table .
                             PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
                             psInsert.setString(1, "LastSave"); // Matching up data for the nine ? spots (no zero)
@@ -213,6 +212,8 @@ public class GameLayout extends JFrame {
                             psInsert.setString(5, opponentRight2);
                             psInsert.setInt(6, BooksUser2);
                             psInsert.setInt(7, BooksOpponent2);
+                            psInsert.setInt(8, ArrayListOfSaveNames.getPlayerTeamScoreTo500());
+                            psInsert.setInt(9, ArrayListOfSaveNames.getComputerTeamScoreTo500());
                             psInsert.executeUpdate(); // update and adding it to the statement
                             statement.executeUpdate(addSaveDataSQL);  // update the table.
 
@@ -255,7 +256,7 @@ public class GameLayout extends JFrame {
                         //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
 //      BooksUser int, BooksOpponent int, ScoreUser int, ScoreOpponent int )";
                         String addSaveDataSQL = "INSERT INTO spades (Name, playerHand, opponentleft, TeammateAccoss, opponentRight, BooksUser, BooksOpponent, ScoreUser, ScoreOpponent )" +
-                                " VALUES (?, ? , ? , ? , ? , ?, ?, NULL, NULL )";
+                                " VALUES (?, ? , ? , ? , ? , ?, ?, ?, ? )";
                         // my TODO to add  the total score for games of more the one round.
                         // Creating the SQL statement which will be used to add your data to the table .
                         PreparedStatement psInsert = connection.prepareStatement(addSaveDataSQL); // An insert statement for easier use of the table
@@ -266,6 +267,8 @@ public class GameLayout extends JFrame {
                         psInsert.setString(5, opponentRight2);
                         psInsert.setInt(6, BooksUser2);
                         psInsert.setInt(7, BooksOpponent2);
+                        psInsert.setInt(8, ArrayListOfSaveNames.getPlayerTeamScoreTo500());
+                        psInsert.setInt(9, ArrayListOfSaveNames.getComputerTeamScoreTo500());
                         psInsert.executeUpdate(); // update and adding it to the statement
                         statement.executeUpdate(addSaveDataSQL);  // update the table.
 //spades (Name varchar(12), PlayerHand varchar(40), OpponentLeft varchar(40), TeammateAccoss varchar(40), OpponentRight varchar(40),
@@ -319,7 +322,11 @@ public class GameLayout extends JFrame {
                                 PlayerTeamBooks = booksUserInt; // Putting it as current books.
                                 int booksOpponentInt = resultSet.getInt("BooksOpponent");
                                 ComputerTeamBooks = booksOpponentInt;
-                                //TODO add score
+                                //
+                                int playerTeamScore = resultSet.getInt("ScoreUser");
+                                ArrayListOfSaveNames.setPlayerTeamScoreTo500(playerTeamScore);
+                                int computerTeamScore = resultSet.getInt("ScoreOpponent");
+                                ArrayListOfSaveNames.setComputerTeamScoreTo500(computerTeamScore);
 
                             }
 
@@ -1169,7 +1176,12 @@ public class GameLayout extends JFrame {
             PlayerTeamBooks = booksUserInt; // Putting it as current books.
             int booksOpponentInt = resultSetLoad.getInt("BooksOpponent");
             ComputerTeamBooks = booksOpponentInt;
-            //TODO add score
+            //
+            int playerTeamScore = resultSetLoad.getInt("ScoreUser");
+            ArrayListOfSaveNames.setPlayerTeamScoreTo500(playerTeamScore);
+            int computerTeamScore = resultSetLoad.getInt("ScoreOpponent");
+            ArrayListOfSaveNames.setComputerTeamScoreTo500(computerTeamScore);
+
             }
             resultSetLoad.close(); // Closing time. Time for you to go out go out into the world.
             //PreparedStatement.CLOSE_CURRENT_RESULT; // Closing time. Turn the lights up over every boy and every girl.
@@ -1185,7 +1197,7 @@ public class GameLayout extends JFrame {
 
     public void newRoundForGame(int howManyCardsHaveBeenPlayed) { // This method is ment to see if all 13 cards have been played and you need to run the next round.
 
-        // my TODO
+        // my TODO add something to check if game is over. (500 points)
 
         int playerPoints = 0; // Basic integer I plan on using for math and sending data
         int computerPoints = 0;
